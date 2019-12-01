@@ -3,31 +3,55 @@ import Vuex from 'vuex'
 
 const axios = require('axios').default;
 
+const moment = require('moment')
+require('moment/locale/es')
 Vue.use(Vuex)
+ 
+Vue.use(require('vue-moment'), {
+    moment
+})
 
 const store = new Vuex.Store({
     state: {
-        list: [
-           /* {
-                name: "Coffe time", desc: "Morning coffee break at 10 o'clock", start: "2019-11-29", status: "DURING",
-            },
-            {
-                name: "Coffe time", desc: "Morning coffee break at 10 o'clock", start: "2019-11-29", status: "PASUED",
-            },
-            {
-                name: "Coffe time", desc: "Morning coffee break at 10 o'clock", start: "2019-11-29", status: "WAITING"
-            },
-            {
-                name: "Coffe time", desc: "Morning coffee break at 10 o'clock", start: "2019-11-29", status: "DONE"
-            },*/
-        ],
-        auth: null
+        list: [],
+        page: 0,
+        auth: null,
+        las_page: 1,
+        state: true,
+        date: moment().format('YYYY-MM-DD'),
+        tomorrow: moment().add(1, 'd').format('YYYY-MM-DD'),
+        yesterday: moment().subtract(1, 'd').format('YYYY-MM-DD'),
+        addDay: 1,
+        deleteDay: 1,
+        calculateTime: false,
+        allTime: "0",
+        currentTime: '0',
+        dailyTime: '0',
+        calc: 0
+        
     },
     mutations: {
-        newList (state){
+        newList (state, payload){
+            var url = "date=" + this.state.date;
+            if(payload.search !== undefined){
+                url += "&search="+ payload.search
+            }
+           
             axios
-                .get('http://localhost/taskTimerTracker/public/api/tasks')
-                .then(response => (this.state.list = response.data))
+                .get('http://localhost/taskTimerTracker/public/api/tasks?'+url)
+                .then(response => {
+                    this.state.last_page = response.data.las_page
+                        this.state.list = response.data.tasks
+                        this.state.allTime =response.data.allTimer
+                        this.state.dailyTime = response.data.dailyTimer
+                        this.state.currentTime = response.data.currentTime
+                        this.state.calc = response.data.calc
+                    if(this.state.last_page === this.state.page){
+                        this.state.state = false
+                    }else{
+                        this.state.state = true
+                    }
+                })
         },
         searchTask(state, payload){
             console.log(payload.search);
@@ -40,25 +64,38 @@ const store = new Vuex.Store({
             })
             .then(response => (this.state.list = response.data))
         },
-        increment (state, payload){
-            return state.count = state.count + payload.amount;
+        changeDay(state, payload){
+            if(payload.method === 'add'){
+                this.state.addDay += 1;
+                this.state.deleteDay -= 1;
+            }else{
+                this.state.addDay -= 1;
+                this.state.deleteDay += 1;
+            }
+            this.state.date = payload.day
+            this.state.tomorrow = moment().add(this.state.addDay, 'd').format('YYYY-MM-DD')
+            this.state.yesterday =  moment().subtract(this.state.deleteDay, 'd').format('YYYY-MM-DD')
         },
-        decrement (state, payload){
-            return state.count = state.count - payload.amount;
-        }
+        icrementTime(state){
+            this.state.allTime ++
+            this.state.dailyTime++
+            this.state.currentTime++
+        },
+
     },
-      actions: {
-        newList (context) {
-            context.commit('newList');
+    actions: {
+        newList (context, payload) {
+            context.commit('newList', payload);
         },
-        searchTask(context, payload) {
-            context.commit('searchTask', payload);
+        searchTask(context, payload) {  
+            context.commit('newList', payload);
         },
-        increment (context, payload) {
-            context.commit('increment', payload)
+        changeDay (context, payload){
+            context.commit('changeDay', payload);
+            context.commit('newList', payload);
         },
-        decrement (context, payload) {
-            context.commit('decrement', payload)
+        icrementTime(context){
+            context.commit('icrementTime');
         }
     }
   })
