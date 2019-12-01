@@ -29,7 +29,7 @@
         {{desc}}
       </b-col>
       <b-col cols="3">
-        Total tiem spent: {{ status ==='DURING'? getTime(currentTime) :  getTime(time) }}
+        Total time spent: {{ status ==='DURING'? getTime(currentTime) :  getTime(time) }}
       </b-col>
       <b-col cols="3">
         Actual status: {{status}}
@@ -144,7 +144,7 @@ export default {
       changeStatus(status){
         const vm = this;
          axios
-            .post('http://localhost/taskTimerTracker/public/api/tasks/changeStatus/'+this.id ,{
+            .post('http://wgoracej.usermd.net/api/tasks/changeStatus/'+this.id ,{
               status: status,
               date: this.$store.state.date
               })
@@ -172,7 +172,7 @@ export default {
         }).then((result) => {
         if (result.value) {
           axios
-            .delete('http://localhost/taskTimerTracker/public/api/tasks/delete/'+this.id ,)
+            .delete('http://wgoracej.usermd.net/api/tasks/delete/'+this.id ,)
             .then((respone) =>{
                 Vue.swal('Deleted!', 'Task hase been deleted', 'success')   
                 store.dispatch({
@@ -201,7 +201,7 @@ export default {
         evt.preventDefault()
         var vm = this;
           axios
-            .post('http://localhost/taskTimerTracker/public/api/tasks/edit/'+this.id ,{
+            .post('http://wgoracej.usermd.net/api/tasks/edit/'+this.id ,{
               name: this.edit.newName,
               desc: this.edit.newDesc
             }).then((respone) =>{
@@ -218,7 +218,7 @@ export default {
       onSubmitAddComment(evt){
         evt.preventDefault()
          axios
-            .post('http://localhost/taskTimerTracker/public/api/comment/add/'+this.id ,{
+            .post('http://wgoracej.usermd.net/api/comment/add/'+this.id ,{
               auth: this.$store.state.auth,
               description: this.commentDesc
             })

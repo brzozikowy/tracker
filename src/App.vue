@@ -44,7 +44,7 @@ export default {
             type: type.Newlist
           });
     /*var tasks =  axios
-      .get('http://localhost/taskTimerTracker/public/api/tasks')
+      .get('http://wgoracej.usermd.net/api/tasks')
       .then(response => (this.info = response))
     console.log(tasks);*/
 

@@ -14,8 +14,8 @@
                     <b-nav-item>
                         <b-button variant="info" @click="showAddtemplateModal = !showAddtemplateModal">Create template task</b-button>
                     </b-nav-item>
-                    <b-nav-item>
-                        <b-button variant="info" href="/api/list/download" target='_blank'> Download csv</b-button>
+                    <b-nav-item  href="/api/list/download" target='_blank'>
+                        <b-button variant="info"> Download csv</b-button>
                     </b-nav-item>
                 </b-navbar-nav>
 
@@ -143,7 +143,7 @@ export default {
         addDaily(){
             var vm = this;
             axios
-            .post('http://localhost/taskTimerTracker/public/api/addTemplate',)
+            .post('http://wgoracej.usermd.net/api/addTemplate',)
             .then((respone) =>{
                 Vue.swal('Added!', 'Template tasks hase been added', 'success')   
                 store.dispatch({
@@ -159,9 +159,9 @@ export default {
             const vm = this;
             evt.preventDefault()
             
-            this.showAddtemplateModal = !this.showAddtemplateModal
+            this.showAddtaskModal = !this.showAddtaskModal
              axios
-            .post('http://localhost/taskTimerTracker/public/api/tasks/create' ,
+            .post('http://wgoracej.usermd.net/api/tasks/create' ,
             {
                 name: this.task.name,
                 desc: this.task.desc,
@@ -189,7 +189,7 @@ export default {
             
             this.showAddtemplateModal = !this.showAddtemplateModal
              axios
-            .post('http://localhost/taskTimerTracker/public/api/createTemplate' ,
+            .post('http://wgoracej.usermd.net/api/createTemplate' ,
             {
                 name: this.template.name,
                 desc: this.template.desc

@@ -38,7 +38,7 @@ const store = new Vuex.Store({
             }
            
             axios
-                .get('http://localhost/taskTimerTracker/public/api/tasks?'+url)
+                .get('http://wgoracej.usermd.net/api/tasks?'+url)
                 .then(response => {
                     this.state.last_page = response.data.las_page
                         this.state.list = response.data.tasks
@@ -56,7 +56,7 @@ const store = new Vuex.Store({
         searchTask(state, payload){
             console.log(payload.search);
             axios
-            .get('http://localhost/taskTimerTracker/public/api/tasks' ,
+            .get('http://wgoracej.usermd.net/api/tasks' ,
             {
                 params: {
                 search: payload.search
